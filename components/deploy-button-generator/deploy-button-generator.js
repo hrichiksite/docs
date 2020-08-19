@@ -51,6 +51,12 @@ export default function DeployButtonGenerator() {
   const [developerIdError, setDeveloperIdError] = useState('')
   const [deployHook, setDeployHook] = useState('')
   const [deployHookError, setDeployHookError] = useState('')
+  const [demoTitle, setDemoTitle] = useState('')
+  const [demoDescription, setDemoDescription] = useState('')
+  const [demoUrl, setDemoUrl] = useState('')
+  const [demoUrlError, setDemoUrlError] = useState('')
+  const [demoImage, setDemoImage] = useState('')
+  const [demoImageError, setDemoImageError] = useState('')
   const [projectName, setProjectName] = useState('')
   const [projectNameError, setProjectNameError] = useState('')
   const [repoName, setRepoName] = useState('')
@@ -196,6 +202,36 @@ export default function DeployButtonGenerator() {
     setDeployHook(event.target.value)
   }
 
+  const handleDemoTitleChange = (event) => {
+    setDemoTitle(event.target.value)
+  }
+
+  const handleDemoDescriptionChange = (event) => {
+    setDemoDescription(event.target.value)
+  }
+
+  const handleDemoUrlChange = (event) => {
+    const newDemoUrl = event.target.value
+
+    if (newDemoUrl.length >= 1 && !validateURL(newDemoUrl)) {
+      setDemoUrlError('The Demo URL must be a valid URL.')
+    } else {
+      setDemoUrlError('')
+      setDemoUrl(newDemoUrl)
+    }
+  }
+
+  const handleDemoImageChange = (event) => {
+    const newDemoImage = event.target.value
+
+    if (newDemoImage.length >= 1 && !validateURL(newDemoImage)) {
+      setDemoImageError('The Demo Image must be a valid URL.')
+    } else {
+      setDemoImageError('')
+      setDemoImage(newDemoImage)
+    }
+  }
+
   const filteredEnv = env.filter((envVar) => envVar.value !== '')
   const hasEnv = filteredEnv.length !== 0
   const envValues = filteredEnv.map((envVar) => envVar.value).toString()
@@ -256,6 +292,12 @@ export default function DeployButtonGenerator() {
     redirectUrl && deployHook
       ? `&production-deploy-hook=${encodeURIComponent(deployHook)}`
       : ''
+  }${demoTitle ? `&demo-title=${encodeURIComponent(demoTitle)}` : ''}${
+    demoDescription
+      ? `&demo-description=${encodeURIComponent(demoDescription)}`
+      : ''
+  }${demoUrl ? `&demo-url=${encodeURIComponent(demoUrl)}` : ''}${
+    demoImage ? `&demo-image=${encodeURIComponent(demoImage)}` : ''
   }`
 
   const completeHTMLUrl = (
@@ -300,6 +342,26 @@ export default function DeployButtonGenerator() {
       {redirectUrl && deployHook ? (
         <>
           &amp;<b>production-deploy-hook={encodeURIComponent(deployHook)}</b>
+        </>
+      ) : null}
+      {demoTitle ? (
+        <>
+          &amp;<b>demo-title={encodeURIComponent(demoTitle)}</b>
+        </>
+      ) : null}
+      {demoDescription ? (
+        <>
+          &amp;<b>demo-description={encodeURIComponent(demoDescription)}</b>
+        </>
+      ) : null}
+      {demoUrl ? (
+        <>
+          &amp;<b>demo-url={encodeURIComponent(demoUrl)}</b>
+        </>
+      ) : null}
+      {demoImage ? (
+        <>
+          &amp;<b>demo-image={encodeURIComponent(demoImage)}</b>
         </>
       ) : null}
     </span>
@@ -600,6 +662,88 @@ export default function DeployButtonGenerator() {
               <Text small>
                 Learn more about{' '}
                 <Link href="#deploy-hook">the Deploy Hook parameter →</Link>
+              </Text>
+            </div>
+          </Details>
+        </div>
+
+        <div className={styles.settingsSection}>
+          <Details title="Demo">
+            <Text small>
+              The Demo Title parameter allows you to define a title of a demo
+              website, which is displayed in the Vercel Git Import Flow page.
+            </Text>
+            <Spacer />
+            <Clearable
+              label="Demo Title"
+              placeholder="APM Story"
+              onChange={handleDemoTitleChange}
+            />
+            <Spacer y={0.5} />
+            <div className={styles.learnMoreLink}>
+              <Text small>
+                Learn more about{' '}
+                <Link href="#demo-title">the Demo Title parameter →</Link>
+              </Text>
+            </div>
+            <HR spacing={16} />
+            <Text small>
+              The Demo Description parameter allows you to define a description
+              of a demo website, which is displayed in the Vercel Git Import
+              Flow page.
+            </Text>
+            <Spacer />
+            <Clearable
+              label="Demo Description"
+              placeholder="A statically generated blog example using Next.js."
+              onChange={handleDemoDescriptionChange}
+            />
+            <Spacer y={0.5} />
+            <div className={styles.learnMoreLink}>
+              <Text small>
+                Learn more about{' '}
+                <Link href="#demo-description">
+                  the Demo Description parameter →
+                </Link>
+              </Text>
+            </div>
+            <HR spacing={16} />
+            <Text small>
+              The Demo URL parameter allows you to define a URL of a demo
+              website, which is displayed in the Vercel Git Import Flow page.
+            </Text>
+            <Spacer />
+            <Clearable
+              label="Demo URL"
+              placeholder="https://example.com"
+              onChange={handleDemoUrlChange}
+              error={demoUrlError}
+            />
+            <Spacer y={0.5} />
+            <div className={styles.learnMoreLink}>
+              <Text small>
+                Learn more about{' '}
+                <Link href="#demo-url">the Demo URL parameter →</Link>
+              </Text>
+            </div>
+            <HR spacing={16} />
+            <Text small>
+              The Demo Image parameter allows you to define a URL of an external
+              image of a demo website, which is displayed in the Vercel Git
+              Import Flow page.
+            </Text>
+            <Spacer />
+            <Clearable
+              label="Demo Image"
+              placeholder="https://example.com/image.png"
+              onChange={handleDemoImageChange}
+              error={demoImageError}
+            />
+            <Spacer y={0.5} />
+            <div className={styles.learnMoreLink}>
+              <Text small>
+                Learn more about{' '}
+                <Link href="#demo-image">the Demo Image parameter →</Link>
               </Text>
             </div>
           </Details>
